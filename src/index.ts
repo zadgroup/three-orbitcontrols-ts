@@ -72,7 +72,7 @@ export class OrbitControls extends THREE.EventDispatcher {
 
   private rotateStart: THREE.Vector2;
   private rotateEnd: THREE.Vector2;
-  private rotateDelta: THREE.Vector2
+  private rotateDelta: THREE.Vector2;
 
   private panStart: THREE.Vector2;
   private panEnd: THREE.Vector2;
@@ -274,7 +274,7 @@ export class OrbitControls extends THREE.EventDispatcher {
         this.panStart.copy( this.panEnd );
         this.update();
       }
-    }
+    };
 
     this.onMouseUp = ( event: ThreeEvent ) => {
       if ( this.enabled === false ) return;
@@ -344,10 +344,10 @@ export class OrbitControls extends THREE.EventDispatcher {
         case 2:	{
           if ( this.enableZoom === false ) return;
 
-          var dx = event.touches[ 0 ].pageX - event.touches[ 1 ].pageX;
-          var dy = event.touches[ 0 ].pageY - event.touches[ 1 ].pageY;
+          const dx = event.touches[ 0 ].pageX - event.touches[ 1 ].pageX;
+          const dy = event.touches[ 0 ].pageY - event.touches[ 1 ].pageY;
 
-          var distance = Math.sqrt( dx * dx + dy * dy );
+          const distance = Math.sqrt( dx * dx + dy * dy );
           this.dollyStart.set( 0, distance );
           this.state = STATE.TOUCH_DOLLY;
         } break;
@@ -383,7 +383,7 @@ export class OrbitControls extends THREE.EventDispatcher {
           this.rotateEnd.set( event.touches[ 0 ].pageX, event.touches[ 0 ].pageY );
           this.rotateDelta.subVectors( this.rotateEnd, this.rotateStart );
 
-          var element = this.domElement === document ? this.domElement.body : this.domElement;
+          const element = this.domElement === document ? this.domElement.body : this.domElement;
 
           // rotating across whole screen goes 360 degrees around
           this.rotateLeft( 2 * Math.PI * this.rotateDelta.x / (element as any).clientWidth * this.rotateSpeed );
@@ -401,10 +401,10 @@ export class OrbitControls extends THREE.EventDispatcher {
           if ( this.state !== STATE.TOUCH_DOLLY ) return; // is this needed?...
 
           //console.log( 'handleTouchMoveDolly' );
-          var dx = event.touches[ 0 ].pageX - event.touches[ 1 ].pageX;
-          var dy = event.touches[ 0 ].pageY - event.touches[ 1 ].pageY;
+          const dx = event.touches[ 0 ].pageX - event.touches[ 1 ].pageX;
+          const dy = event.touches[ 0 ].pageY - event.touches[ 1 ].pageY;
 
-          var distance = Math.sqrt( dx * dx + dy * dy );
+          const distance = Math.sqrt( dx * dx + dy * dy );
 
           this.dollyEnd.set( 0, distance );
 
@@ -440,7 +440,7 @@ export class OrbitControls extends THREE.EventDispatcher {
       if ( this.enabled === false ) return;
       this.dispatchEvent( END_EVENT );
       this.state = STATE.NONE;
-    }
+    };
 
     this.onContextMenu = (event) => {
       event.preventDefault();
@@ -550,11 +550,11 @@ export class OrbitControls extends THREE.EventDispatcher {
   pan( deltaX: number, deltaY: number ) {
     const element = this.domElement === document ? this.domElement.body : this.domElement;
 
-    if ( this.object instanceof THREE.PerspectiveCamera ) {
+    if ( this.object.type === "PerspectiveCamera" ) {
       // perspective
       const position = this.object.position;
       this.panInternalOffset.copy( position ).sub( this.target );
-      var targetDistance = this.panInternalOffset.length();
+      let targetDistance = this.panInternalOffset.length();
 
       // half of the fov is center to top of screen
       targetDistance *= Math.tan( ( this.object.fov / 2 ) * Math.PI / 180.0 );
@@ -562,7 +562,7 @@ export class OrbitControls extends THREE.EventDispatcher {
       // we actually don't use screenWidth, since perspective camera is fixed to screen height
       this.panLeft( 2 * deltaX * targetDistance / (element as any).clientHeight, this.object.matrix );
       this.panUp( 2 * deltaY * targetDistance / (element as any).clientHeight, this.object.matrix );
-    } else if ( this.object instanceof THREE.OrthographicCamera ) {
+    } else if ( this.object.type === "OrthographicCamera" ) {
       // orthographic
       this.panLeft( deltaX * ( this.object.right - this.object.left ) / this.object.zoom / (element as any).clientWidth, this.object.matrix );
       this.panUp( deltaY * ( this.object.top - this.object.bottom ) / this.object.zoom / (element as any).clientHeight, this.object.matrix );
@@ -574,9 +574,9 @@ export class OrbitControls extends THREE.EventDispatcher {
   }
 
   dollyIn( dollyScale ) {
-    if ( this.object instanceof THREE.PerspectiveCamera ) {
+    if ( this.object.type === "PerspectiveCamera" ) {
       this.scale /= dollyScale;
-    } else if ( this.object instanceof THREE.OrthographicCamera ) {
+    } else if ( this.object.type === "OrthographicCamera" ) {
       this.object.zoom = Math.max( this.minZoom, Math.min( this.maxZoom, this.object.zoom * dollyScale ) );
       this.object.updateProjectionMatrix();
       this.zoomChanged = true;
@@ -587,9 +587,9 @@ export class OrbitControls extends THREE.EventDispatcher {
   }
 
   dollyOut( dollyScale ) {
-    if ( this.object instanceof THREE.PerspectiveCamera ) {
+    if ( this.object.type === "PerspectiveCamera" ) {
       this.scale *= dollyScale;
-    } else if ( this.object instanceof THREE.OrthographicCamera ) {
+    } else if ( this.object.type === "OrthographicCamera" ) {
       this.object.zoom = Math.max( this.minZoom, Math.min( this.maxZoom, this.object.zoom / dollyScale ) );
       this.object.updateProjectionMatrix();
       this.zoomChanged = true;

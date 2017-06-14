@@ -1,9 +1,15 @@
 "use strict";
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
 var THREE = require("three");
 var STATE = {
     NONE: -1,
@@ -425,7 +431,7 @@ var OrbitControls = (function (_super) {
     // deltaX and deltaY are in pixels; right and down are positive
     OrbitControls.prototype.pan = function (deltaX, deltaY) {
         var element = this.domElement === document ? this.domElement.body : this.domElement;
-        if (this.object instanceof THREE.PerspectiveCamera) {
+        if (this.object.type === "PerspectiveCamera") {
             // perspective
             var position = this.object.position;
             this.panInternalOffset.copy(position).sub(this.target);
@@ -436,7 +442,7 @@ var OrbitControls = (function (_super) {
             this.panLeft(2 * deltaX * targetDistance / element.clientHeight, this.object.matrix);
             this.panUp(2 * deltaY * targetDistance / element.clientHeight, this.object.matrix);
         }
-        else if (this.object instanceof THREE.OrthographicCamera) {
+        else if (this.object.type === "OrthographicCamera") {
             // orthographic
             this.panLeft(deltaX * (this.object.right - this.object.left) / this.object.zoom / element.clientWidth, this.object.matrix);
             this.panUp(deltaY * (this.object.top - this.object.bottom) / this.object.zoom / element.clientHeight, this.object.matrix);
@@ -448,10 +454,10 @@ var OrbitControls = (function (_super) {
         }
     };
     OrbitControls.prototype.dollyIn = function (dollyScale) {
-        if (this.object instanceof THREE.PerspectiveCamera) {
+        if (this.object.type === "PerspectiveCamera") {
             this.scale /= dollyScale;
         }
-        else if (this.object instanceof THREE.OrthographicCamera) {
+        else if (this.object.type === "OrthographicCamera") {
             this.object.zoom = Math.max(this.minZoom, Math.min(this.maxZoom, this.object.zoom * dollyScale));
             this.object.updateProjectionMatrix();
             this.zoomChanged = true;
@@ -462,10 +468,10 @@ var OrbitControls = (function (_super) {
         }
     };
     OrbitControls.prototype.dollyOut = function (dollyScale) {
-        if (this.object instanceof THREE.PerspectiveCamera) {
+        if (this.object.type === "PerspectiveCamera") {
             this.scale *= dollyScale;
         }
-        else if (this.object instanceof THREE.OrthographicCamera) {
+        else if (this.object.type === "OrthographicCamera") {
             this.object.zoom = Math.max(this.minZoom, Math.min(this.maxZoom, this.object.zoom / dollyScale));
             this.object.updateProjectionMatrix();
             this.zoomChanged = true;
