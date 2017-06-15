@@ -30,7 +30,7 @@ const EPS = 0.000001;
 *    Pan - right mouse, or arrow keys / touch: three finger swipe
 */
 export class OrbitControls extends THREE.EventDispatcher {
-  object: THREE.Camera;
+  object: THREE.Camera | THREE.OrthographicCamera | THREE.PerspectiveCamera;
   domElement: HTMLElement | HTMLDocument;
   window: Window;
 

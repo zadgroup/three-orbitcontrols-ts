@@ -14,7 +14,7 @@ import * as THREE from 'three';
 *    Pan - right mouse, or arrow keys / touch: three finger swipe
 */
 export declare class OrbitControls extends THREE.EventDispatcher {
-    object: THREE.Camera;
+    object: THREE.Camera | THREE.OrthographicCamera | THREE.PerspectiveCamera;
     domElement: HTMLElement | HTMLDocument;
     window: Window;
     enabled: boolean;
