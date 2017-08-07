@@ -67,9 +67,9 @@ export class OrbitControls extends EventDispatcher {
   private spherical: Spherical;
   private sphericalDelta: Spherical;
   private scale: number;
-  private target0: Vector3;
-  private position0: Vector3;
-  private zoom0: any;
+  protected target0: Vector3;
+  protected position0: Vector3;
+  protected zoom0: any;
   private state: number;
   private panOffset: Vector3;
   private zoomChanged: boolean;

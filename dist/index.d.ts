@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import { EventDispatcher, Camera, OrthographicCamera, PerspectiveCamera, Vector3, MOUSE } from 'three';
 /**
 * @author qiao / https://github.com/qiao
 * @author mrdoob / http://mrdoob.com
@@ -13,12 +13,12 @@ import * as THREE from 'three';
 *    Zoom - middle mouse, or mousewheel / touch: two finger spread or squish
 *    Pan - right mouse, or arrow keys / touch: three finger swipe
 */
-export declare class OrbitControls extends THREE.EventDispatcher {
-    object: THREE.Camera | THREE.OrthographicCamera | THREE.PerspectiveCamera;
+export declare class OrbitControls extends EventDispatcher {
+    object: Camera | OrthographicCamera | PerspectiveCamera;
     domElement: HTMLElement | HTMLDocument;
     window: Window;
     enabled: boolean;
-    target: THREE.Vector3;
+    target: Vector3;
     enableZoom: boolean;
     zoomSpeed: number;
     minDistance: number;
@@ -43,18 +43,18 @@ export declare class OrbitControls extends THREE.EventDispatcher {
         BOTTOM: number;
     };
     mouseButtons: {
-        ORBIT: THREE.MOUSE;
-        ZOOM: THREE.MOUSE;
-        PAN: THREE.MOUSE;
+        ORBIT: MOUSE;
+        ZOOM: MOUSE;
+        PAN: MOUSE;
     };
     enableDamping: boolean;
     dampingFactor: number;
     private spherical;
     private sphericalDelta;
     private scale;
-    private target0;
-    private position0;
-    private zoom0;
+    protected target0: Vector3;
+    protected position0: Vector3;
+    protected zoom0: any;
     private state;
     private panOffset;
     private zoomChanged;
@@ -84,7 +84,7 @@ export declare class OrbitControls extends THREE.EventDispatcher {
     private onTouchEnd;
     private onTouchMove;
     private onKeyDown;
-    constructor(object: THREE.Camera, domElement?: HTMLElement, domWindow?: Window);
+    constructor(object: Camera, domElement?: HTMLElement, domWindow?: Window);
     update(): boolean;
     panLeft(distance: number, objectMatrix: any): void;
     panUp(distance: number, objectMatrix: any): void;
@@ -99,6 +99,6 @@ export declare class OrbitControls extends THREE.EventDispatcher {
     getAzimuthalAngle(): number;
     dispose(): void;
     reset(): void;
-    readonly center: THREE.Vector3;
+    readonly center: Vector3;
     noZoom: boolean;
 }

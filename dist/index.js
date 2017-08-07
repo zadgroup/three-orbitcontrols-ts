@@ -10,7 +10,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var THREE = require("three");
+var three_1 = require("three");
 var STATE = {
     NONE: -1,
     ROTATE: 0,
@@ -48,7 +48,7 @@ var OrbitControls = (function (_super) {
         // Set to false to disable this control
         _this.enabled = true;
         // "target" sets the location of focus, where the object orbits around
-        _this.target = new THREE.Vector3();
+        _this.target = new three_1.Vector3();
         // How far you can dolly in and out ( PerspectiveCamera only )
         _this.minDistance = 0;
         _this.maxDistance = Infinity;
@@ -86,37 +86,37 @@ var OrbitControls = (function (_super) {
         // The four arrow keys
         _this.keys = { LEFT: 37, UP: 38, RIGHT: 39, BOTTOM: 40 };
         // Mouse buttons
-        _this.mouseButtons = { ORBIT: THREE.MOUSE.LEFT, ZOOM: THREE.MOUSE.MIDDLE, PAN: THREE.MOUSE.RIGHT };
+        _this.mouseButtons = { ORBIT: three_1.MOUSE.LEFT, ZOOM: three_1.MOUSE.MIDDLE, PAN: three_1.MOUSE.RIGHT };
         // for reset
         _this.target0 = _this.target.clone();
         _this.position0 = _this.object.position.clone();
         _this.zoom0 = _this.object.zoom;
         // for update speedup
-        _this.updateOffset = new THREE.Vector3();
+        _this.updateOffset = new three_1.Vector3();
         // so camera.up is the orbit axis
-        _this.updateQuat = new THREE.Quaternion().setFromUnitVectors(object.up, new THREE.Vector3(0, 1, 0));
+        _this.updateQuat = new three_1.Quaternion().setFromUnitVectors(object.up, new three_1.Vector3(0, 1, 0));
         _this.updateQuatInverse = _this.updateQuat.clone().inverse();
-        _this.updateLastPosition = new THREE.Vector3();
-        _this.updateLastQuaternion = new THREE.Quaternion();
+        _this.updateLastPosition = new three_1.Vector3();
+        _this.updateLastQuaternion = new three_1.Quaternion();
         _this.state = STATE.NONE;
         _this.scale = 1;
         // current position in spherical coordinates
-        _this.spherical = new THREE.Spherical();
-        _this.sphericalDelta = new THREE.Spherical();
-        _this.panOffset = new THREE.Vector3();
+        _this.spherical = new three_1.Spherical();
+        _this.sphericalDelta = new three_1.Spherical();
+        _this.panOffset = new three_1.Vector3();
         _this.zoomChanged = false;
-        _this.rotateStart = new THREE.Vector2();
-        _this.rotateEnd = new THREE.Vector2();
-        _this.rotateDelta = new THREE.Vector2();
-        _this.panStart = new THREE.Vector2();
-        _this.panEnd = new THREE.Vector2();
-        _this.panDelta = new THREE.Vector2();
-        _this.dollyStart = new THREE.Vector2();
-        _this.dollyEnd = new THREE.Vector2();
-        _this.dollyDelta = new THREE.Vector2();
-        _this.panLeftV = new THREE.Vector3();
-        _this.panUpV = new THREE.Vector3();
-        _this.panInternalOffset = new THREE.Vector3();
+        _this.rotateStart = new three_1.Vector2();
+        _this.rotateEnd = new three_1.Vector2();
+        _this.rotateDelta = new three_1.Vector2();
+        _this.panStart = new three_1.Vector2();
+        _this.panEnd = new three_1.Vector2();
+        _this.panDelta = new three_1.Vector2();
+        _this.dollyStart = new three_1.Vector2();
+        _this.dollyEnd = new three_1.Vector2();
+        _this.dollyDelta = new three_1.Vector2();
+        _this.panLeftV = new three_1.Vector3();
+        _this.panUpV = new three_1.Vector3();
+        _this.panInternalOffset = new three_1.Vector3();
         // event handlers - FSM: listen for events and reset state
         _this.onMouseDown = function (event) {
             if (_this.enabled === false)
@@ -187,7 +187,7 @@ var OrbitControls = (function (_super) {
                 _this.update();
             }
         };
-        _this.onMouseUp = function (event) {
+        _this.onMouseUp = function () {
             if (_this.enabled === false)
                 return;
             document.removeEventListener('mousemove', _this.onMouseMove, false);
@@ -348,7 +348,7 @@ var OrbitControls = (function (_super) {
                 }
             }
         };
-        _this.onTouchEnd = function (event) {
+        _this.onTouchEnd = function () {
             if (_this.enabled === false)
                 return;
             _this.dispatchEvent(END_EVENT);
@@ -431,7 +431,7 @@ var OrbitControls = (function (_super) {
     // deltaX and deltaY are in pixels; right and down are positive
     OrbitControls.prototype.pan = function (deltaX, deltaY) {
         var element = this.domElement === document ? this.domElement.body : this.domElement;
-        if (this.object.type === "PerspectiveCamera") {
+        if (this.object instanceof three_1.PerspectiveCamera) {
             // perspective
             var position = this.object.position;
             this.panInternalOffset.copy(position).sub(this.target);
@@ -442,7 +442,7 @@ var OrbitControls = (function (_super) {
             this.panLeft(2 * deltaX * targetDistance / element.clientHeight, this.object.matrix);
             this.panUp(2 * deltaY * targetDistance / element.clientHeight, this.object.matrix);
         }
-        else if (this.object.type === "OrthographicCamera") {
+        else if (this.object instanceof three_1.OrthographicCamera) {
             // orthographic
             this.panLeft(deltaX * (this.object.right - this.object.left) / this.object.zoom / element.clientWidth, this.object.matrix);
             this.panUp(deltaY * (this.object.top - this.object.bottom) / this.object.zoom / element.clientHeight, this.object.matrix);
@@ -454,10 +454,10 @@ var OrbitControls = (function (_super) {
         }
     };
     OrbitControls.prototype.dollyIn = function (dollyScale) {
-        if (this.object.type === "PerspectiveCamera") {
+        if (this.object instanceof three_1.PerspectiveCamera) {
             this.scale /= dollyScale;
         }
-        else if (this.object.type === "OrthographicCamera") {
+        else if (this.object instanceof three_1.OrthographicCamera) {
             this.object.zoom = Math.max(this.minZoom, Math.min(this.maxZoom, this.object.zoom * dollyScale));
             this.object.updateProjectionMatrix();
             this.zoomChanged = true;
@@ -468,10 +468,10 @@ var OrbitControls = (function (_super) {
         }
     };
     OrbitControls.prototype.dollyOut = function (dollyScale) {
-        if (this.object.type === "PerspectiveCamera") {
+        if (this.object instanceof three_1.PerspectiveCamera) {
             this.scale *= dollyScale;
         }
-        else if (this.object.type === "OrthographicCamera") {
+        else if (this.object instanceof three_1.OrthographicCamera) {
             this.object.zoom = Math.max(this.minZoom, Math.min(this.maxZoom, this.object.zoom / dollyScale));
             this.object.updateProjectionMatrix();
             this.zoomChanged = true;
@@ -523,7 +523,7 @@ var OrbitControls = (function (_super) {
     Object.defineProperty(OrbitControls.prototype, "center", {
         // backward compatibility
         get: function () {
-            console.warn('THREE.OrbitControls: .center has been renamed to .target');
+            console.warn('OrbitControls: .center has been renamed to .target');
             return this.target;
         },
         enumerable: true,
@@ -531,16 +531,16 @@ var OrbitControls = (function (_super) {
     });
     Object.defineProperty(OrbitControls.prototype, "noZoom", {
         get: function () {
-            console.warn('THREE.OrbitControls: .noZoom has been deprecated. Use .enableZoom instead.');
+            console.warn('OrbitControls: .noZoom has been deprecated. Use .enableZoom instead.');
             return !this.enableZoom;
         },
         set: function (value) {
-            console.warn('THREE.OrbitControls: .noZoom has been deprecated. Use .enableZoom instead.');
+            console.warn('OrbitControls: .noZoom has been deprecated. Use .enableZoom instead.');
             this.enableZoom = !value;
         },
         enumerable: true,
         configurable: true
     });
     return OrbitControls;
-}(THREE.EventDispatcher));
+}(three_1.EventDispatcher));
 exports.OrbitControls = OrbitControls;
