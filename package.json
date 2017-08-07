@@ -1,6 +1,6 @@
 {
   "name": "@avatsaev/three-orbitcontrols-ts",
-  "version": "0.1.5",
+  "version": "0.2.0",
   "description": "ThreeJS OrbitControls as a standalone and typescript compatible npm module (patched for TypeScript 2.3.4)",
   "main": "dist",
   "scripts": {
@@ -28,7 +28,7 @@
   },
   "homepage": "https://github.com/avatsaev/three-orbitcontrols-ts#readme",
   "dependencies": {
-    "three": "^0.84"
+    "three": "^0.86"
   },
   "devDependencies": {
     "@types/core-js": "^0.9.41",
@@ -39,7 +39,7 @@
     "jsdom": "^9.9.1",
     "mocha": "^3.2.0",
     "ts-node": "^2.0.0",
-    "typescript": "^2.3.4"
+    "typescript": "^2.4.1"
   },
   "typings": "dist/index.d.ts",
   "directories": {
